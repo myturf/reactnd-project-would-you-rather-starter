@@ -1,8 +1,12 @@
+// Moved this file from root to data directory as Webstorm keeps complaining
+// Added avatar urls
+// Modified save.. methods for better readability ( for myself :))
+
 let users = {
   sarahedo: {
     id: 'sarahedo',
     name: 'Sarah Edo',
-    avatarURL: ,
+    avatarURL: '/images/sarah.png',
     answers: {
       "8xf0y6ziyjabvozdd253nd": 'optionOne',
       "6ni6ok3ym7mf1p33lnez": 'optionTwo',
@@ -14,7 +18,7 @@ let users = {
   tylermcginnis: {
     id: 'tylermcginnis',
     name: 'Tyler McGinnis',
-    avatarURL: ,
+    avatarURL: '/images/tyler.png',
     answers: {
       "vthrdm985a262al8qx3do": 'optionOne',
       "xj352vofupe1dqz9emx13r": 'optionTwo',
@@ -24,7 +28,7 @@ let users = {
   johndoe: {
     id: 'johndoe',
     name: 'John Doe',
-    avatarURL: ,
+    avatarURL: '/images/john.png',
     answers: {
       "xj352vofupe1dqz9emx13r": 'optionOne',
       "vthrdm985a262al8qx3do": 'optionTwo',
@@ -147,43 +151,43 @@ function formatQuestion ({ optionOneText, optionTwoText, author }) {
   }
 }
 
-export function _saveQuestion (question) {
+export function _saveQuestion(question) {
   return new Promise((res, rej) => {
-    const authedUser = question.author;
+    const authenticatedUser = question.author;
     const formattedQuestion = formatQuestion(question);
 
     setTimeout(() => {
       questions = {
         ...questions,
         [formattedQuestion.id]: formattedQuestion
-      }
-      
+      };
+
       users = {
         ...users,
-        [authedUser]: {
-          ...users[authedUser],
-          questions: users[authedUser].questions.concat([formattedQuestion.id])
+        [authenticatedUser]: {
+          ...users[authenticatedUser],
+          questions: users[authenticatedUser].questions.concat([formattedQuestion.id])
         }
-      }
+      };
 
-      res(formattedQuestion)
-    }, 1000)
-  })
+      res(formattedQuestion);
+    }, 1000);
+  });
 }
 
-export function _saveQuestionAnswer ({ authedUser, qid, answer }) {
+export function _saveQuestionAnswer({authUser: authenticatedUser, qid, answer}) {
   return new Promise((res, rej) => {
     setTimeout(() => {
       users = {
         ...users,
-        [authedUser]: {
-          ...users[authedUser],
+        [authenticatedUser]: {
+          ...users[authenticatedUser],
           answers: {
-            ...users[authedUser].answers,
+            ...users[authenticatedUser].answers,
             [qid]: answer
           }
         }
-      }
+      };
 
       questions = {
         ...questions,
@@ -191,12 +195,72 @@ export function _saveQuestionAnswer ({ authedUser, qid, answer }) {
           ...questions[qid],
           [answer]: {
             ...questions[qid][answer],
-            votes: questions[qid][answer].votes.concat([authedUser])
+            votes: questions[qid][answer].votes.concat([authenticatedUser])
           }
         }
-      }
+      };
 
-      res()
-    }, 500)
-  })
+      res();
+    }, 500);
+  });
+
+// Original ones
+
+  /*
+
+
+  export function _saveQuestion (question) {
+    return new Promise((res, rej) => {
+      const authedUser = question.author;
+      const formattedQuestion = formatQuestion(question);
+
+      setTimeout(() => {
+        questions = {
+          ...questions,
+          [formattedQuestion.id]: formattedQuestion
+        }
+
+        users = {
+          ...users,
+          [authedUser]: {
+            ...users[authedUser],
+            questions: users[authedUser].questions.concat([formattedQuestion.id])
+          }
+        }
+
+        res(formattedQuestion)
+      }, 1000)
+    })
+  }
+
+  export function _saveQuestionAnswer ({ authedUser, qid, answer }) {
+    return new Promise((res, rej) => {
+      setTimeout(() => {
+        users = {
+          ...users,
+          [authedUser]: {
+            ...users[authedUser],
+            answers: {
+              ...users[authedUser].answers,
+              [qid]: answer
+            }
+          }
+        }
+
+        questions = {
+          ...questions,
+          [qid]: {
+            ...questions[qid],
+            [answer]: {
+              ...questions[qid][answer],
+              votes: questions[qid][answer].votes.concat([authedUser])
+            }
+          }
+        }
+
+        res()
+      }, 500)
+    })
+
+    */
 }
